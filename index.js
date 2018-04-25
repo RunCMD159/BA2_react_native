@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
-import App from './App';
+import TabNavigator from './App';
 
-AppRegistry.registerComponent('reactNDemo', () => App);
+AppRegistry.registerComponent('reactNDemo', () => TabNavigator);
