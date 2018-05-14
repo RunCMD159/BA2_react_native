@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, Button, ScrollView} from 'react-native';
+import {Button, ListView, ScrollView, Text, View} from 'react-native';
 
 
 export class PerformanceScreen extends React.Component {
@@ -17,17 +17,24 @@ export class PerformanceScreen extends React.Component {
             let randomString = 'Test String ' + Math.floor((Math.random() * 1000) + 1);
             this.performanceData.push(randomString);
         }
-        this.state = {showList: false, runningTime: 0};
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.state = {
+            showList: false, runningTime: 0,
+            dataSource: ds.cloneWithRows(this.performanceData)
+        };
     }
 
     startPerformanceTest() {
         this.startTime = new Date().getTime();
         this.setState({showList: true});
+        console.log(this.state);
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
+        alert('mounted');
         this.endTime = new Date().getTime();
-        this.setState({runningTime: this.endTime - this.startTime})
+        this.setState({runningTime: this.endTime - this.startTime});
+        console.log(this.state)
     }
 
 
@@ -39,13 +46,16 @@ export class PerformanceScreen extends React.Component {
                 <ScrollView>
                     {
                         this.state.showList &&
-                        this.performanceData.map((perfData, index) => {
-                            return <Text key={index}>{perfData}</Text>
-                        })
+                        (<ListView
+                            dataSource={this.state.dataSource}
+                            renderRow={(rowData) => (
+                                <Text>{rowData}</Text>
+                            )}
+                        />)
+
                     }
                 </ScrollView>
             </View>
         );
     }
-
 }
