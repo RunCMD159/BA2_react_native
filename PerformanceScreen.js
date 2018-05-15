@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, ListView, ScrollView, Text, View} from 'react-native';
+import {Button, ScrollView, Text, View} from 'react-native';
 
 
 export class PerformanceScreen extends React.Component {
@@ -8,19 +8,19 @@ export class PerformanceScreen extends React.Component {
     performanceData;
     startTime;
     endTime;
+    lastItem;
     state;
 
     constructor(props) {
         super(props);
         this.performanceData = [];
-        for (let i = 0; i < 1000; i++) {
-            let randomString = 'Test String ' + Math.floor((Math.random() * 1000) + 1);
+        for (let i = 0; i < 10000; i++) {
+            let randomString = 'Test String ' + Math.floor((Math.random() * 10000) + 1);
             this.performanceData.push(randomString);
         }
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.lastItem = this.performanceData[this.performanceData.length - 1];
         this.state = {
             showList: false, runningTime: 0,
-            dataSource: ds.cloneWithRows(this.performanceData)
         };
     }
 
@@ -30,11 +30,11 @@ export class PerformanceScreen extends React.Component {
         console.log(this.state);
     }
 
-    componentDidMount() {
-        alert('mounted');
+    endPerformanceTest() {
         this.endTime = new Date().getTime();
         this.setState({runningTime: this.endTime - this.startTime});
-        console.log(this.state)
+        console.log(this.state);
+        alert('Ende');
     }
 
 
@@ -43,19 +43,26 @@ export class PerformanceScreen extends React.Component {
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                 <Button onPress={() => this.startPerformanceTest()} title='Test starten'/>
                 <Text>Running time: {this.state.runningTime} ms</Text>
-                <ScrollView>
-                    {
-                        this.state.showList &&
-                        (<ListView
-                            dataSource={this.state.dataSource}
-                            renderRow={(rowData) => (
-                                <Text>{rowData}</Text>
-                            )}
-                        />)
-
-                    }
-                </ScrollView>
+                {
+                    this.state.showList &&
+                    (<ScrollView>
+                        {this.performanceData.map((data, index) => {
+                            return <Text key={index}>{data}</Text>
+                        })
+                        }
+                    </ScrollView>)
+                }
             </View>
         );
     }
 }
+
+/*
+<ListView
+dataSource={this.state.dataSource}
+renderRow={(rowData) => (
+    <Text>{rowData}</Text>
+)}
+onEndReached={() => this.endPerformanceTest()}
+/>*/
+
