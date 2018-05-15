@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button, ScrollView, Text, View} from 'react-native';
+import {Button, Text, View} from 'react-native';
+import {ScrollListComponent} from "./ScrollListComponent";
 
 
 export class PerformanceScreen extends React.Component {
@@ -8,7 +9,6 @@ export class PerformanceScreen extends React.Component {
     performanceData;
     startTime;
     endTime;
-    lastItem;
     state;
 
     constructor(props) {
@@ -18,10 +18,10 @@ export class PerformanceScreen extends React.Component {
             let randomString = 'Test String ' + Math.floor((Math.random() * 10000) + 1);
             this.performanceData.push(randomString);
         }
-        this.lastItem = this.performanceData[this.performanceData.length - 1];
         this.state = {
             showList: false, runningTime: 0,
         };
+        this.endPerformanceTest = this.endPerformanceTest.bind(this);
     }
 
     startPerformanceTest() {
@@ -34,7 +34,6 @@ export class PerformanceScreen extends React.Component {
         this.endTime = new Date().getTime();
         this.setState({runningTime: this.endTime - this.startTime});
         console.log(this.state);
-        alert('Ende');
     }
 
 
@@ -45,24 +44,11 @@ export class PerformanceScreen extends React.Component {
                 <Text>Running time: {this.state.runningTime} ms</Text>
                 {
                     this.state.showList &&
-                    (<ScrollView>
-                        {this.performanceData.map((data, index) => {
-                            return <Text key={index}>{data}</Text>
-                        })
-                        }
-                    </ScrollView>)
+                    (<ScrollListComponent data={this.performanceData} endPerformanceTest={this.endPerformanceTest}/>)
                 }
             </View>
         );
     }
 }
 
-/*
-<ListView
-dataSource={this.state.dataSource}
-renderRow={(rowData) => (
-    <Text>{rowData}</Text>
-)}
-onEndReached={() => this.endPerformanceTest()}
-/>*/
 
