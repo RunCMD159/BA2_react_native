@@ -13,14 +13,24 @@ export class PerformanceScreen extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            showList: false, runningTime: 0,
+        };
+    }
+
+    componentDidMount() {
+        this.initializePerformanceTest();
+    }
+
+    initializePerformanceTest() {
         this.performanceData = [];
         for (let i = 0; i < 10000; i++) {
             let randomString = 'Test String ' + Math.floor((Math.random() * 10000) + 1);
             this.performanceData.push(randomString);
         }
-        this.state = {
+        this.setState({
             showList: false, runningTime: 0,
-        };
+        });
         this.endPerformanceTest = this.endPerformanceTest.bind(this);
     }
 
@@ -36,10 +46,21 @@ export class PerformanceScreen extends React.Component {
         console.log(this.state);
     }
 
+    resetFields() {
+        performanceData = [];
+        startTime = 0;
+        endTime = 0;
+        this.setState({
+            showList: false, runningTime: 0,
+        });
+    }
 
     render() {
         return (
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Button onPress={() => {
+                    this.resetFields()
+                }} title='Test zurücksetzen'/>
                 <Button onPress={() => this.startPerformanceTest()} title='Test starten'/>
                 <Text>Running time: {this.state.runningTime} ms</Text>
                 {
