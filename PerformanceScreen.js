@@ -23,6 +23,11 @@ export class PerformanceScreen extends React.Component {
     }
 
     initializePerformanceTest() {
+        this.initPerformanceData();
+        this.endPerformanceTest = this.endPerformanceTest.bind(this);
+    }
+
+    initPerformanceData() {
         this.performanceData = [];
         for (let i = 0; i < 10000; i++) {
             let randomString = 'Test String ' + Math.floor((Math.random() * 10000) + 1);
@@ -31,7 +36,6 @@ export class PerformanceScreen extends React.Component {
         this.setState({
             showList: false, runningTime: 0,
         });
-        this.endPerformanceTest = this.endPerformanceTest.bind(this);
     }
 
     startPerformanceTest() {
@@ -47,12 +51,9 @@ export class PerformanceScreen extends React.Component {
     }
 
     resetFields() {
-        performanceData = [];
+        this.initPerformanceData();
         startTime = 0;
         endTime = 0;
-        this.setState({
-            showList: false, runningTime: 0,
-        });
     }
 
     render() {
