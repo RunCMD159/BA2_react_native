@@ -45,11 +45,11 @@ export default class FileScreen extends React.Component {
             <View>
                 <Button
                     onPress={() => {this.readFile()}}
-                    title="Load"
+                    title="Laden"
                 />
                 <Button
                     onPress={() => {this.writeToFile()}}
-                    title="Save"
+                    title="Speichern"
                 />
                 <TextInput
                     editable={true}
